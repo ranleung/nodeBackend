@@ -1,7 +1,7 @@
-var express    = require("express");
-var bodyParser = require("body-parser");
-var db         = require('./models/index.js');
-var app        = express();
+var express    = require("express"),
+    bodyParser = require("body-parser"),
+    db         = require('./models/index.js'),
+    app        = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -11,7 +11,8 @@ var router = express.Router();
 require("locus");
 
 router.use(function(req, res, next){
-  console.log("Something is happening.");
+  //Do something here before the request is processed.  Ex: Checking if user is authenticated.
+  console.log(req.method, req.url);
   next();
 });
 
@@ -27,7 +28,11 @@ router.route("/names")
       })
     })
   .post(function(req, res){
-    db.User.create({first_name: req.body.first_name, last_name: req.body.last_name, age: req.body.age}).then(function(data){
+    db.User.create({
+      first_name: req.body.first_name, 
+      last_name: req.body.last_name, 
+      age: req.body.age
+    }).then(function(data){
       res.json({message: "A User was created"});
     });
   });
@@ -39,7 +44,7 @@ router.route("/names/:id")
         id: req.params.id
       }
     }).then(function(data){
-      console.log(req.param.id)
+      console.log("id: "+req.params.id)
       res.json({user: data})
     })
   })
